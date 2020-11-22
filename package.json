@@ -2,7 +2,7 @@
   "name": "@jamescgooch/sshconnect",
   "version": "1.0.0",
   "description": "ssh connection manager bash script",
-  "main": "index.js",
+  "main": "sshconnect",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
