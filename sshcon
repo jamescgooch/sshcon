@@ -18,60 +18,60 @@ clear
 echo
 echo "Checking dependencies....."
 
-WE_NEED_THIS="tmux"
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $WE_NEED_THIS|grep "install ok installed")
-echo Checking for $WE_NEED_THIS: $PKG_OK
+REQUIRED_PKG="tmux"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+echo Checking for $REQUIRED_PKG: $PKG_OK
 if [ "" = "$PKG_OK" ]; then
-  echo "No $WE_NEED_THIS. Setting up $WE_NEED_THIS."
-  sudo apt-get --yes install $WE_NEED_THIS 
+  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+  sudo apt-get --yes install $REQUIRED_PKG 
 fi
 
-WE_NEED_THIS="gcc"
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $WE_NEED_THIS|grep "install ok installed")
-echo Checking for $WE_NEED_THIS: $PKG_OK
+REQUIRED_PKG="gcc"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+echo Checking for $REQUIRED_PKG: $PKG_OK
 if [ "" = "$PKG_OK" ]; then
-  echo "No $WE_NEED_THIS. Setting up $WE_NEED_THIS."
-  sudo apt-get --yes install $WE_NEED_THIS 
+  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+  sudo apt-get --yes install $REQUIRED_PKG 
 fi
 
-WE_NEED_THIS="shc"
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $WE_NEED_THIS|grep "install ok installed")
-echo Checking for $WE_NEED_THIS: $PKG_OK
+REQUIRED_PKG="shc"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+echo Checking for $REQUIRED_PKG: $PKG_OK
 if [ "" = "$PKG_OK" ]; then
-  echo "No $WE_NEED_THIS. Setting up $WE_NEED_THIS."
-  sudo apt-get --yes install $WE_NEED_THIS 
+  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+  sudo apt-get --yes install $REQUIRED_PKG 
 fi
 
-WE_NEED_THIS="ssh"
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $WE_NEED_THIS|grep "install ok installed")
-echo Checking for $WE_NEED_THIS: $PKG_OK
+REQUIRED_PKG="ssh"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+echo Checking for $REQUIRED_PKG: $PKG_OK
 if [ "" = "$PKG_OK" ]; then
-  echo "No $WE_NEED_THIS. Setting up $WE_NEED_THIS."
-  sudo apt-get --yes install $WE_NEED_THIS
+  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+  sudo apt-get --yes install $REQUIRED_PKG
 fi
 
-WE_NEED_THIS="sed"
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $WE_NEED_THIS|grep "install ok installed")
-echo Checking for $WE_NEED_THIS: $PKG_OK
+REQUIRED_PKG="sed"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+echo Checking for $REQUIRED_PKG: $PKG_OK
 if [ "" = "$PKG_OK" ]; then
-  echo "No $WE_NEED_THIS. Setting up $WE_NEED_THIS."
-  sudo apt-get --yes install $WE_NEED_THIS
+  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+  sudo apt-get --yes install $REQUIRED_PKG
 fi
 
-WE_NEED_THIS="dnsutils"
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $WE_NEED_THIS|grep "install ok installed")
-echo Checking for $WE_NEED_THIS: $PKG_OK
+REQUIRED_PKG="dnsutils"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+echo Checking for $REQUIRED_PKG: $PKG_OK
 if [ "" = "$PKG_OK" ]; then
-  echo "No $WE_NEED_THIS. Setting up $WE_NEED_THIS."
-  sudo apt-get --yes install $WE_NEED_THIS
+  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+  sudo apt-get --yes install $REQUIRED_PKG
 fi
 
-WE_NEED_THIS="cowsay"
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $WE_NEED_THIS|grep "install ok installed")
-echo Checking for $WE_NEED_THIS: $PKG_OK
+REQUIRED_PKG="cowsay"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+echo Checking for $REQUIRED_PKG: $PKG_OK
 if [ "" = "$PKG_OK" ]; then
-  echo "No $WE_NEED_THIS. Setting up $WE_NEED_THIS."
-  sudo apt-get --yes install $WE_NEED_THIS 
+  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+  sudo apt-get --yes install $REQUIRED_PKG 
 fi
 
 echo
