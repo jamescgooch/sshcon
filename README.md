@@ -1,6 +1,6 @@
 # sshcon
 
-ssh connection manager script for Bash 5.1.0(1)-rc2 on BSD or Debian.
+ssh connection manager script for Bash 5.1.0(1)-rc2 on Debian bullseye/sid
 
 From Bash: wget https://github.com/jamescgooch/sshcon/releases/download/v1.0/sshcon && sudo chmod 777 sshcon && ./sshcon
 
