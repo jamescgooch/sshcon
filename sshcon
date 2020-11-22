@@ -1,0 +1,154 @@
+
+#!/bin/bash
+#sshcon
+#ssh connection manager script for bash
+#Copyright (c) 2020, James Gooch
+#All rights reserved.
+
+#This source code is licensed under the BSD license.
+#Free to use free to share. 
+
+#Notes: sudo chmod 777 sshcon
+#Notes: ./sshcon
+#Notes: to start without dependency checks run this line: bash <(sed -n '76,$p' sshcon
+#Notes: no really that shit works lol  
+
+#START
+
+clear
+echo
+#lets check for dependencies because we gonna use stuff might as well tell people
+echo "Checking dependencies....."
+# you might say to yourself "wait why am I checking dependencies every time I run this"
+
+#cowsay is the sophisticated version of echo, I promise. 
+REQUIRED_PKG="cowsay"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+echo Checking for $REQUIRED_PKG: $PKG_OK
+if [ "" = "$PKG_OK" ]; then
+  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+  sudo apt-get --yes install $REQUIRED_PKG 
+fi
+
+#this is being installed lol you might want to check your firewall
+#dont worry if its already installed were not goona mess up your stupid keys
+REQUIRED_PKG="ssh"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+echo Checking for $REQUIRED_PKG: $PKG_OK
+if [ "" = "$PKG_OK" ]; then
+  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+  sudo apt-get --yes install $REQUIRED_PKG
+fi
+
+#we need this because while there are other ways of getting your external ip im gonna use dig. ya dig?
+REQUIRED_PKG="dnsutils"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+echo Checking for $REQUIRED_PKG: $PKG_OK
+if [ "" = "$PKG_OK" ]; then
+  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+  sudo apt-get --yes install $REQUIRED_PKG
+fi
+
+echo
+echo
+#here we see that sophisticated echo. see? 
+cowsay -f eyes "dependencies met. checking bash."
+
+#this is a waste of time. mine, yours, everyone that wont run this. but its nice to know the any key trap.
+read -n 1 -s -r -p "Press any key to check bash requirements"
+
+clear
+echo
+echo
+
+#everything after this check is made for bash so we goona kick you if your not in bash
+
+if [ -z "${BASH_VERSINFO+x}" ]; then
+    #laters 
+    echo 'this shell is not supported by sshconnect, please exit to bash and run again' && exit
+else
+    echo 'bash shell detected: checking network and port ttls'
+#bash is the train hobo of shells but its loyal
+fi
+
+shell_name="$(ps -o comm= -p $$)"
+#echo "${shell_name##*[[:cntrl:][:punct:][:space:]]}" this will be added later leave it alone or dont idc 
+
+echo
+clear
+
+#!/bin/bash
+
+# lol this does nothing but its super fun right? (behold the status update unto itself) 
+prog() {
+    local w=80 p=$1;  shift
+    printf -v dots "%*s" "$(( $p*$w/100 ))" ""; dots=${dots// /.};
+    printf "\r\e[K|%-*s| %3d %% %s" "$w" "$dots" "$p" "$*";
+}
+for x in {1..100} ; do
+    prog "$x" still checking...
+    sleep .01   # do some work here
+done ; echo
+
+
+#FINISH
+echo $finish
+
+#reeeking of dirty fucking class
+cowsay -f eyes "welcome to sshconnect."
+
+echo
+
+#ok this is pretty fancy by using paste we are making fake tables and using netstat and grep to listen on ports
+# just change the port number in the echo statement and after grep in each line for your own needs.  
+
+paste -d' | ' <(echo "Port 80 ttls: ") <(netstat -tn 2>/dev/null | grep :80 | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr | head) <(echo "Port 22 ttls: ") <(netstat -tn 2>/dev/null | grep :22 | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr | head)
+echo
+
+paste -d' | ' <(echo "Port 443 ttls: ") <(netstat -tn 2>/dev/null | grep :443 | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr | head) <(echo "Port 2420 ttls: ") <(netstat -tn 2>/dev/null | grep :2420 | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr | head)  
+echo
+
+paste -d' | ' <(echo "Your local IP Address is:") <(hostname -I) <(echo " Your External IP is:") <(dig +short myip.opendns.com @resolver1.opendns.com)
+echo
+
+#here we have our choices for connections that we made from my other stupid script buildconnections
+
+PS3='Choose your SSH connnection:'
+sshconnections=("BASH" "ZSH" "TMUX" "ServerOne" "ServerTwo" "ServerThree" "ServerFour" "Quit")
+select ThisSSH in "${sshconnections[@]}"; do
+    case $ThisSSH in
+	"BASH")
+         clear && exit && bash	    
+            ;;
+        "ZSH")
+	        zsh
+            ;;
+        "TMUX")
+            tmux new-session \; split-window -h \; split-window -v \; attach
+	        ;;
+#fill this out with your ssh connections
+#try not to include your passwords unless your going to encrypt this file
+        "ServerOne")
+           echo "connecting"
+           ssh 0.0.0.0 -p 420 -l username
+            ;;
+        "ServerTwo")
+           echo "connecting"
+           ssh -l user domain.com
+            ;;
+	    "ServerThree")
+           echo "connecting"
+	       ssh -i user.pem user@domain
+	        ;;
+        "ServerFour")
+           echo "connecting"    
+           ssh -i user.pem user@0.0.0.0
+            break
+            ;;
+        "Quit")
+            echo "Good-Bye"
+            exit
+    esac
+done
+
+
