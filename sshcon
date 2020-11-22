@@ -66,7 +66,6 @@ if [ -z "${BASH_VERSINFO+x}" ]; then
     echo 'this shell is not supported by sshconnect, please exit to bash and run again' && exit
 else
     echo 'bash shell detected: checking network and port ttls'
-#bash is the train hobo of shells but its loyal
 fi
 
 shell_name="$(ps -o comm= -p $$)"
