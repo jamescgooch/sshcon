@@ -10,7 +10,7 @@
 
 #Notes: sudo chmod 777 sshcon
 #Notes: ./sshcon
-#Notes: to start without dependency checks run this line: bash <(sed -n '76,$p' sshcon
+#Notes: to start without dependency checks run this line: bash <(sed -n '82,$p' sshcon
 
 clear
 echo
@@ -83,18 +83,7 @@ echo
 clear
 
 #!/bin/bash
-
-#behold the status update unto itself
-
-prog() {
-    local w=80 p=$1;  shift
-    printf -v dots "%*s" "$(( $p*$w/100 ))" ""; dots=${dots// /.};
-    printf "\r\e[K|%-*s| %3d %% %s" "$w" "$dots" "$p" "$*";
-}
-for x in {1..100} ; do
-    prog "$x" still checking...
-    sleep .01   # do some work here
-done ; echo
+#this is here just in case your starting this script from line 82
 
 #reeeking of dirty fucking class
 cowsay -f eyes "welcome to sshconnect."
