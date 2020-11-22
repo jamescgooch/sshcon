@@ -9,6 +9,10 @@
 
 #Notes: sudo chmod 777 sshcon
 #Notes: ./sshcon
+#Notes:
+#Notes: After editing make binary to conceal any details added and move to bin so you can run sshcon
+#Notes: shc -f sshcon | mv sshcon.x /usr/bin/sshcon
+#Notes:
 #Notes: to start without dependency checks run: bash <(sed -n '82,$p' sshcon
 
 clear
@@ -16,6 +20,22 @@ echo
 echo "Checking dependencies....."
 
 WE_NEED_THIS="tmux"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $WE_NEED_THIS|grep "install ok installed")
+echo Checking for $WE_NEED_THIS: $PKG_OK
+if [ "" = "$PKG_OK" ]; then
+  echo "No $WE_NEED_THIS. Setting up $WE_NEED_THIS."
+  sudo apt-get --yes install $WE_NEED_THIS 
+fi
+
+WE_NEED_THIS="gcc"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $WE_NEED_THIS|grep "install ok installed")
+echo Checking for $WE_NEED_THIS: $PKG_OK
+if [ "" = "$PKG_OK" ]; then
+  echo "No $WE_NEED_THIS. Setting up $WE_NEED_THIS."
+  sudo apt-get --yes install $WE_NEED_THIS 
+fi
+
+WE_NEED_THIS="shc"
 PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $WE_NEED_THIS|grep "install ok installed")
 echo Checking for $WE_NEED_THIS: $PKG_OK
 if [ "" = "$PKG_OK" ]; then

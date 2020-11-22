@@ -1,0 +1,22 @@
+{
+  "name": "@jamescgooch/sshconnect",
+  "version": "1.0.0",
+  "description": "ssh connection manager bash script",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamescgooch/sshcon.git"
+  },
+  "keywords": [
+    "sshconnect"
+  ],
+  "author": "James C. Gooch",
+  "license": "SEE LICENSE IN License ",
+  "bugs": {
+    "url": "https://github.com/jamescgooch/sshcon/issues"
+  },
+  "homepage": "https://github.com/jamescgooch/sshcon#readme"
+}
