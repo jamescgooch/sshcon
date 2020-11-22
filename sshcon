@@ -1,4 +1,3 @@
-
 #!/bin/bash
 #sshcon
 #ssh connection manager script for bash
@@ -96,7 +95,6 @@ else
 fi
 
 shell_name="$(ps -o comm= -p $$)"
-#echo "${shell_name##*[[:cntrl:][:punct:][:space:]]}" this will be added later leave it alone or dont idc 
 
 echo
 clear
