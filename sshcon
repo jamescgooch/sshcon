@@ -5,12 +5,11 @@
 #Copyright (c) 2020, James Gooch
 #All rights reserved.
 
-#This source code is licensed under the BSD license.
 #Free to use free to share. 
 
 #Notes: sudo chmod 777 sshcon
 #Notes: ./sshcon
-#Notes: to start without dependency checks run this line: bash <(sed -n '82,$p' sshcon
+#Notes: to start without dependency checks run: bash <(sed -n '82,$p' sshcon
 
 clear
 echo
