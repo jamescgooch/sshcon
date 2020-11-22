@@ -84,7 +84,7 @@ clear
 #!/bin/bash
 #this is here just in case your starting this script from line 82
 
-#reeeking of dirty fucking class
+
 cowsay -f eyes "welcome to sshconnect."
 
 echo
