@@ -12,35 +12,68 @@
 #Notes: After editing make binary to conceal any details added and move to bin so you can run sshcon
 #Notes: shc -f sshcon | mv sshcon.x /usr/bin/sshcon
 #Notes:
-#Notes: to start without dependency checks run: bash <(sed -n '82,$p' sshcon
+#Notes: to start without dependency checks run: bash <(sed -n '120,$p' sshcon
 
 clear
 echo
+
 echo "Checking dependencies....."
 
-REQUIRED_PKG="tmux"
+sudo apt update
+sudo apt upgrade 
+
+REQUIRED_PKG="cowsay"
 PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
 echo Checking for $REQUIRED_PKG: $PKG_OK
 if [ "" = "$PKG_OK" ]; then
   echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
-  sudo apt-get --yes install $REQUIRED_PKG 
+  sudo apt-get --yes install $REQUIRED_PKG
 fi
 
-REQUIRED_PKG="gcc"
+REQUIRED_PKG="xfce4"
 PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
 echo Checking for $REQUIRED_PKG: $PKG_OK
-if [ "" = "$PKG_OK" ]; then
+if [ "" = "$PKG_OK" ]; then 
   echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
-  sudo apt-get --yes install $REQUIRED_PKG 
+  sudo apt-get --yes install $REQUIRED_PKG
 fi
 
-REQUIRED_PKG="shc"
+REQUIRED_PKG="xrdp"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+echo Checking for $REQUIRED_PKG: $PKG_OK
+if [ "" = "$PKG_OK" ]; then
+   echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+   sudo apt-get --yes install $REQUIRED_PKG
+fi
+
+sudo systemctl enable xrdp
+
+echo xfce4-session >~/.xsession
+
+sudo service xrdp restart
+
+sleep 1 && echo "desktop and xrdp installed. configured. opening port 3389 for RDP"
+
+REQUIRED_PKG="fail2ban"
 PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
 echo Checking for $REQUIRED_PKG: $PKG_OK
 if [ "" = "$PKG_OK" ]; then
   echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
-  sudo apt-get --yes install $REQUIRED_PKG 
+  sudo apt-get --yes install $REQUIRED_PKG
 fi
+
+REQUIRED_PKG="ufw"
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+echo Checking for $REQUIRED_PKG: $PKG_OK
+if [ "" = "$PKG_OK" ]; then
+  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+  sudo apt-get --yes install $REQUIRED_PKG
+fi
+
+sudo ufw allow 3389 && sudo ufw allow ssh && sudo ufw allow http && sudo ufw allow https && sudo ufw enable && sudo ufw status
+
+echo
+clear
 
 REQUIRED_PKG="ssh"
 PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
@@ -50,13 +83,6 @@ if [ "" = "$PKG_OK" ]; then
   sudo apt-get --yes install $REQUIRED_PKG
 fi
 
-REQUIRED_PKG="sed"
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
-echo Checking for $REQUIRED_PKG: $PKG_OK
-if [ "" = "$PKG_OK" ]; then
-  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
-  sudo apt-get --yes install $REQUIRED_PKG
-fi
 
 REQUIRED_PKG="dnsutils"
 PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
@@ -66,18 +92,11 @@ if [ "" = "$PKG_OK" ]; then
   sudo apt-get --yes install $REQUIRED_PKG
 fi
 
-REQUIRED_PKG="cowsay"
-PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
-echo Checking for $REQUIRED_PKG: $PKG_OK
-if [ "" = "$PKG_OK" ]; then
-  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
-  sudo apt-get --yes install $REQUIRED_PKG 
-fi
-
 echo
 echo
 
 cowsay -f eyes "dependencies met. checking bash."
+
 
 read -n 1 -s -r -p "Press any key to check bash requirements"
 
@@ -85,78 +104,67 @@ clear
 echo
 echo
 
-#checking for bash ending if not in bash
 
 if [ -z "${BASH_VERSINFO+x}" ]; then
-    #laters 
+    #laters
     echo 'this shell is not supported by sshconnect, please exit to bash and run again' && exit
 else
     echo 'bash shell detected: checking network and port ttls'
 fi
 
 shell_name="$(ps -o comm= -p $$)"
+#echo "${shell_name##*[[:cntrl:][:punct:][:space:]]}" this will be added later leave it alone or dont idc
 
 echo
 clear
-
-#!/bin/bash
-#this is here just in case your starting this script from line 82
-
 
 cowsay -f eyes "welcome to sshconnect."
 
 echo
 
-# using paste we are making fake tables and using netstat and grep to listen on ports
-# just change the port number in the echo statement and after grep in each line for your own needs.  
-
-paste -d' | ' <(echo "Port 80 ttls: ") <(netstat -tn 2>/dev/null | grep :80 | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr | head) <(echo "Port 22 ttls: ") <(netstat -tn 2>/dev/null | grep :22 | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr | head)
+paste -d' | ' <(echo "Port 80 ttls: ") <(netstat -tn 2>/dev/null | grep :80 | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr | head) <(echo " Port 22 ttls: ") <(netstat -tn 2>/dev/null | grep :22 | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr | head)
 echo
 
-paste -d' | ' <(echo "Port 443 ttls: ") <(netstat -tn 2>/dev/null | grep :443 | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr | head) <(echo "Port 2420 ttls: ") <(netstat -tn 2>/dev/null | grep :2420 | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr | head)  
+paste -d' | ' <(echo "Port 443 ttls: ") <(netstat -tn 2>/dev/null | grep :443 | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr | head) <(echo " Port 2420 ttls: ") <(netstat -tn 2>/dev/null | grep :2420 | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr | head)  
 echo
 
-paste -d' | ' <(echo "Your local IP Address is:") <(hostname -I) <(echo " Your External IP is:") <(dig +short myip.opendns.com @resolver1.opendns.com)
+paste -d' | ' <(echo "Your local IP Address is: ") <(hostname -I) <(echo " Your External IP is: ") <(dig +short myip.opendns.com @resolver1.opendns.com)
 echo
 
-#Menu
+sudo fail2ban-client status sshd
+echo
 
 PS3='Choose your SSH connnection:'
-sshconnections=("BASH" "ZSH" "TMUX" "ServerOne" "ServerTwo" "ServerThree" "ServerFour" "Quit")
+sshconnections=("BASH" "ZSH" "TMUX" "PfSense" "VPS" "AzureLinux" "FirewallCheck" "Quit")
 select ThisSSH in "${sshconnections[@]}"; do
     case $ThisSSH in
-	"BASH")
-         clear && exit && bash	    
+        "BASH")
+           bash
             ;;
         "ZSH")
-	        zsh
+           zsh
             ;;
         "TMUX")
-            tmux new-session \; split-window -h \; split-window -v \; attach
-	        ;;
-#fill this out with your ssh connections
-#try not to include your passwords unless your going to encrypt this file
-        "ServerOne")
-           echo "connecting"
-           ssh 0.0.0.0 -p 420 -l username
+           tmux new-session \; split-window -h \; split-window -v \; attach
             ;;
-        "ServerTwo")
-           echo "connecting"
-           ssh -l user domain.com
+        "PfSense")
+           ssh 00.00.00.00 -p 2420 -l username
             ;;
-	    "ServerThree")
-           echo "connecting"
-	       ssh -i user.pem user@domain
-	        ;;
-        "ServerFour")
-           echo "connecting"    
+        "VPS")
+           echo "connecting.."
+           ssh -l username domain.com
+            ;;
+        "AzureLinux")
            ssh -i user.pem user@0.0.0.0
+            ;;
+        "FirewallCheck")
+           sudo ufw status && ./sshconnect
             break
             ;;
         "Quit")
             echo "Good-Bye"
             exit
+
     esac
 done
-
 
